@@ -1,11 +1,11 @@
 const file = require('fs');
 const path = require('path');
 const gpio = require('rpi-gpio');
-const PIN_OUT = 36;
+const PIN_OUT = 35;
 
-// gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
-//   if(err) console.log(err, val);
-// });
+gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
+  if(err) console.log(err, val);
+});
 
 const commands = {
     DC: (link, ws) => {
@@ -44,45 +44,69 @@ const commands = {
     },
 }
 
-require('uWebSockets.js').App({
-  }).ws('/*', {
+// require('uWebSockets.js').App({
+//   }).ws('/*', {
     
-    idleTimeout: 0,
-    maxBackpressure: 1024,
-    maxPayloadLength: 512,
+//     idleTimeout: 0,
+//     maxBackpressure: 1024,
+//     maxPayloadLength: 512,
   
-    message: (ws, message, isBinary) => {
+//     message: (ws, message, isBinary) => {
 
-        // gpio.write(PIN_OUT, true);
+//         gpio.write(PIN_OUT, true);
 
-        const data = String.fromCharCode.apply(null, new Uint8Array(message));
-        const parsedData = JSON.parse(data);
+//         const data = String.fromCharCode.apply(null, new Uint8Array(message));
+//         const parsedData = JSON.parse(data);
         
-        const command = commands[parsedData.type];
-        if (!command) ws.send(JSON.stringify({
-            message: 'COMMAND NOT FOUND',
-            type: 'ERR',
-        }, 2, 2));
-        else {
-          command(parsedData.message, ws);
-        }
-        // gpio.write(PIN_OUT, false);
-    },
+//         const command = commands[parsedData.type];
+//         if (!command) ws.send(JSON.stringify({
+//             message: 'COMMAND NOT FOUND',
+//             type: 'ERR',
+//         }, 2, 2));
+//         else {
+//           command(parsedData.message, ws);
+//         }
+//         gpio.write(PIN_OUT, false);
+//     },
     
-    open: (ws) => {
-      commands.setup(ws);
-    },
+//     open: (ws) => {
+//       commands.setup(ws);
+//     },
     
-  }).get('/*', (res, req) => {
+//   }).get('/*', (res, req) => {
   
-    /* It does Http as well */
-    res.writeStatus('200 OK').writeHeader('IsExample', 'Yes').end('Hello there!');
+//     /* It does Http as well */
+//     res.writeStatus('200 OK').writeHeader('IsExample', 'Yes').end('Hello there!');
     
-  }).listen(7171, (listenSocket) => {
+//   }).listen(7171, (listenSocket) => {
   
-    if (listenSocket) {
-      console.log('Listening to port 9001');
+//     if (listenSocket) {
+//       console.log('Listening to port 9001');
 
-    }
+//     }
     
-  });
+//   });
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({
+  port: 8080,
+  perMessageDeflate: {
+    zlibDeflateOptions: {
+      // See zlib defaults.
+      chunkSize: 1024,
+      memLevel: 7,
+      level: 3
+    },
+    zlibInflateOptions: {
+      chunkSize: 10 * 1024
+    },
+    // Other options settable:
+    clientNoContextTakeover: true, // Defaults to negotiated value.
+    serverNoContextTakeover: true, // Defaults to negotiated value.
+    serverMaxWindowBits: 10, // Defaults to negotiated value.
+    // Below options specified as default values.
+    concurrencyLimit: 10, // Limits zlib concurrency for perf.
+    threshold: 1024 // Size (in bytes) below which messages
+    // should not be compressed.
+  }
+});
