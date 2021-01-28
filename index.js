@@ -47,8 +47,8 @@ const commands = {
       }
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
       await lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print(message);
+      await lcd.setCursor(0, 0);
+      await lcd.print(message);
     },
     setup: async (ws) => {
       const file_path = path.resolve(__dirname, 'data.json');
