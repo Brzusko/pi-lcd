@@ -13,12 +13,7 @@ lcd.on('ready', _ => {
   console.log('LCD is UP!!');
   setTimeout(_ => {
     lcd.setCursor(0, 0);
-    lcd.print('Waiting for');
-    lcd.setCursor(0, 1);
-    lcd.print(' co')
-    setInterval(_ => {
-      //lcd.scrollDisplayLeft();
-    }, 1000);
+    lcd.print('Waiting for con');
   }, 1000);
 });
  
@@ -51,6 +46,8 @@ const commands = {
         message: parsedData.message,
       }
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
+      lcd.setCursor(0, 0);
+      lcd.print(message);
     },
     setup: (ws) => {
       const file_path = path.resolve(__dirname, 'data.json');
