@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lcd": "^3.1.0",
     "nanoexpress": "^2.4.9",
     "rpi-gpio": "^2.1.7",
     "uws": "^200.0.0",
