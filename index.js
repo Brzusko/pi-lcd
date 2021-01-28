@@ -72,7 +72,7 @@ wss.on('connection', (ws) => {
 
 
 const Lcd = require('lcd');
-const lcd = new Lcd({rs: 22, e: 18, data: [16, 11, 12, 15], cols: 16, rows: 2});
+const lcd = new Lcd({rs: 45, e: 44, data: [66, 67, 68, 69], cols: 8, rows: 1});
  
 lcd.on('ready', _ => {
   setInterval(_ => {
