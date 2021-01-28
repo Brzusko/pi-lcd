@@ -14,7 +14,7 @@ lcd.on('ready', _ => {
   setTimeout(_ => {
     lcd.setCursor(0, 0);
     lcd.print('Waiting for connection');
-    lcd.autoscroll();
+    lcd.scrollDisplayLeft();
   }, 1000);
 });
  
