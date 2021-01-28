@@ -14,8 +14,8 @@ lcd.on('ready', _ => {
   setTimeout(_ => {
     lcd.setCursor(0, 0);
     lcd.print('Waiting for');
-    //lcd.setCursor(0, 1);
-    //lcd.print('connection')
+    lcd.setCursor(0, 1);
+    lcd.print(' co')
     setInterval(_ => {
       //lcd.scrollDisplayLeft();
     }, 1000);
