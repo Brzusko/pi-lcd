@@ -13,7 +13,7 @@ lcd.on('ready', _ => {
   console.log('LCD is UP!!');
   setTimeout(_ => {
     lcd.setCursor(0, 0);
-    lcd.print('Waiting for connection');
+    lcd.print('Waiting for\n connection');
     setInterval(_ => {
       lcd.scrollDisplayLeft();
     }, 1000);
