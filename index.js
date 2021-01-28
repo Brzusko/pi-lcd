@@ -44,56 +44,26 @@ const commands = {
     },
 }
 
-// require('uWebSockets.js').App({
-//   }).ws('/*', {
-    
-//     idleTimeout: 0,
-//     maxBackpressure: 1024,
-//     maxPayloadLength: 512,
-  
-//     message: (ws, message, isBinary) => {
-
-//         gpio.write(PIN_OUT, true);
-
-//         const data = String.fromCharCode.apply(null, new Uint8Array(message));
-//         const parsedData = JSON.parse(data);
-        
-//         const command = commands[parsedData.type];
-//         if (!command) ws.send(JSON.stringify({
-//             message: 'COMMAND NOT FOUND',
-//             type: 'ERR',
-//         }, 2, 2));
-//         else {
-//           command(parsedData.message, ws);
-//         }
-//         gpio.write(PIN_OUT, false);
-//     },
-    
-//     open: (ws) => {
-//       commands.setup(ws);
-//     },
-    
-//   }).get('/*', (res, req) => {
-  
-//     /* It does Http as well */
-//     res.writeStatus('200 OK').writeHeader('IsExample', 'Yes').end('Hello there!');
-    
-//   }).listen(7171, (listenSocket) => {
-  
-//     if (listenSocket) {
-//       console.log('Listening to port 9001');
-
-//     }
-    
-//   });
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 7171 });
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+wss.on('connection', (ws) => {
+  commands.setup(ws);
+  ws.on('message', (message) => {
+    if (process.platform !== 'win32') gpio.write(PIN_OUT, true);
+
+    const data = String.fromCharCode.apply(null, new Uint8Array(message));
+    const parsedData = JSON.parse(data);
+    
+    const command = commands[parsedData.type];
+    if (!command) ws.send(JSON.stringify({
+        message: 'COMMAND NOT FOUND',
+        type: 'ERR',
+    }, 2, 2));
+    else {
+      command(parsedData.message, ws);
+    }
+    if (process.platform !== 'win32') gpio.write(PIN_OUT, true);
   });
-
-  ws.send('something');
 });
