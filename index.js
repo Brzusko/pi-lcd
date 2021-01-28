@@ -46,6 +46,7 @@ const commands = {
         message: parsedData.message,
       }
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(message);
     },
