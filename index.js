@@ -64,7 +64,7 @@ wss.on('connection', (ws) => {
     else {
       command(parsedData.message, ws);
     }
-    if (process.platform !== 'win32') gpio.write(PIN_OUT, true, (err) => {
+    if (process.platform !== 'win32') gpio.write(PIN_OUT, false, (err) => {
       if(err) console.log(err);
     });
   });
