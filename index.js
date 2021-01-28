@@ -9,8 +9,10 @@ gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
 
 lcd.on('ready', _ => {
   console.log('LCD is UP!!');
-  lcd.setCursor(0, 0);
-  lcd.print('Waiting for connection');
+  setTimeout(_ => {
+    lcd.setCursor(0, 0);
+    lcd.print('Waiting for connection');
+  }, 1000);
 });
  
 process.on('SIGINT', _ => {
