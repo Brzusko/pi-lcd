@@ -72,7 +72,7 @@ wss.on('connection', (ws) => {
 
 
 const Lcd = require('lcd');
-const lcd = new Lcd({rs: 22, e: 18, data: [16, 11, 12, 15], cols: 16, rows: 2});
+const lcd = new Lcd({rs: 25, e: 24, data: [23, 17, 18, 22], cols: 16, rows: 2});
  
 lcd.on('ready', _ => {
   console.log('rdy');
