@@ -2,6 +2,8 @@ const file = require('fs');
 const path = require('path');
 const gpio = require('rpi-gpio');
 const PIN_OUT = 35;
+const Lcd = require('lcd');
+const lcd = new Lcd({rs: 25, e: 24, data: [23, 17, 18, 22], cols: 16, rows: 2});
 
 gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
   if(err) console.log(err, val);
@@ -84,5 +86,3 @@ wss.on('connection', (ws) => {
 });
 
 
-const Lcd = require('lcd');
-const lcd = new Lcd({rs: 25, e: 24, data: [23, 17, 18, 22], cols: 16, rows: 2});
