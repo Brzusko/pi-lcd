@@ -23,7 +23,7 @@ process.on('SIGINT', _ => {
 });
 
 const commands = {
-    DC: (link, ws) => {
+    DC: async (link, ws) => {
         const file_path = path.resolve(__dirname, 'data.json');
         const fileData = file.readFileSync(file_path);
         const parsedData = JSON.parse(fileData);
@@ -35,7 +35,7 @@ const commands = {
         };
         let ok = ws.send(JSON.stringify(messagePayload, 2, 3));
     },
-    chat: (message, ws) => {
+    chat: async (message, ws) => {
       const file_path = path.resolve(__dirname, 'data.json');
       const fileData = file.readFileSync(file_path);
       const parsedData = JSON.parse(fileData);
@@ -46,11 +46,11 @@ const commands = {
         message: parsedData.message,
       }
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
-      lcd.clear();
+      await lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(message);
     },
-    setup: (ws) => {
+    setup: async (ws) => {
       const file_path = path.resolve(__dirname, 'data.json');
       const fileData = file.readFileSync(file_path);
       const parsedData = JSON.parse(fileData);
@@ -66,9 +66,9 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 7171 });
 
-wss.on('connection', (ws) => {
+wss.on('connection', async (ws) => {
   commands.setup(ws);
-  ws.on('message', (message) => {
+  ws.on('message', async (message) => {
     if (process.platform !== 'win32') gpio.write(PIN_OUT, true);
 
     const data = String.fromCharCode.apply(null, new Uint8Array(message));
@@ -80,7 +80,7 @@ wss.on('connection', (ws) => {
         type: 'ERR',
     }, 2, 2));
     else {
-      command(parsedData.message, ws);
+      await command(parsedData.message, ws);
     }
     if (process.platform !== 'win32') gpio.write(PIN_OUT, false, (err) => {
       if(err) console.log(err);
