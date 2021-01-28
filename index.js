@@ -7,6 +7,17 @@ gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
   if(err) console.log(err, val);
 });
 
+lcd.on('ready', _ => {
+  console.log('LCD is UP!!');
+  lcd.setCursor(0, 0);
+  lcd.print('Waiting for connection');
+});
+ 
+process.on('SIGINT', _ => {
+  lcd.close();
+  process.exit();
+});
+
 const commands = {
     DC: (link, ws) => {
         const file_path = path.resolve(__dirname, 'data.json');
@@ -73,21 +84,3 @@ wss.on('connection', (ws) => {
 
 const Lcd = require('lcd');
 const lcd = new Lcd({rs: 25, e: 24, data: [23, 17, 18, 22], cols: 16, rows: 2});
- 
-lcd.on('ready', _ => {
-  console.log('rdy');
-  setInterval(_ => {
-    lcd.setCursor(0, 0);
-    lcd.print(new Date().toISOString().substring(11, 19), err => {
-      if (err) {
-        throw err;
-      }
-    });
-  }, 1000);
-});
- 
-// If ctrl+c is hit, free resources and exit.
-process.on('SIGINT', _ => {
-  lcd.close();
-  process.exit();
-});
