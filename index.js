@@ -75,6 +75,7 @@ const Lcd = require('lcd');
 const lcd = new Lcd({rs: 22, e: 18, data: [16, 11, 12, 15], cols: 16, rows: 2});
  
 lcd.on('ready', _ => {
+  console.log('rdy');
   setInterval(_ => {
     lcd.setCursor(0, 0);
     lcd.print(new Date().toISOString().substring(11, 19), err => {
