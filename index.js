@@ -12,6 +12,7 @@ gpio.setup(PIN_OUT, gpio.DIR_OUT, (err, val) => {
 lcd.on('ready', _ => {
   console.log('LCD is UP!!');
   setTimeout(_ => {
+    lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print('Waiting for con');
   }, 1000);
@@ -59,6 +60,9 @@ const commands = {
         message: parsedData,
       };
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
+      await lcd.clear();
+      await lcd.setCursor(0, 0);
+      await lcd.print(parsedData.message);
     },
 }
 
@@ -68,9 +72,6 @@ const wss = new WebSocket.Server({ port: 7171 });
 
 wss.on('connection', async (ws) => {
   commands.setup(ws);
-  await lcd.clear();
-  await lcd.setCursor(0, 0);
-  await lcd.print('Connected');
   ws.on('message', async (message) => {
     if (process.platform !== 'win32') gpio.write(PIN_OUT, true);
 
