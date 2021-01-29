@@ -46,7 +46,7 @@ const commands = {
         message: parsedData.message,
       }
       let ok = ws.send(JSON.stringify(messagePayload, 2, 2));
-
+      await lcd.clear();
       await lcd.setCursor(0, 0);
       await lcd.print(message);
     },
@@ -68,6 +68,7 @@ const wss = new WebSocket.Server({ port: 7171 });
 
 wss.on('connection', async (ws) => {
   commands.setup(ws);
+  await lcd.clear();
   await lcd.setCursor(0, 0);
   await lcd.print('Connected');
   ws.on('message', async (message) => {
